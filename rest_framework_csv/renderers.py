@@ -1,22 +1,16 @@
-from __future__ import unicode_literals
 import codecs
-import unicodecsv as csv
-from django.conf import settings
-from rest_framework.renderers import *
-from six import BytesIO, text_type
-from rest_framework_csv.orderedrows import OrderedRows
-from rest_framework_csv.misc import Echo
+import csv
+from io import BytesIO
+from logging import getLogger
 from types import GeneratorType
 
-from logging import getLogger
-log = getLogger(__name__)
+from django.conf import settings
+from rest_framework.renderers import *
 
-# six versions 1.3.0 and previous don't have PY2
-try:
-    from six import PY2
-except ImportError:
-    import sys
-    PY2 = sys.version_info[0] == 2
+from .misc import Echo
+from .orderedrows import OrderedRows
+
+log = getLogger(__name__)
 
 
 class CSVRenderer(BaseRenderer):
@@ -156,7 +150,7 @@ class CSVRenderer(BaseRenderer):
     def flatten_list(self, l):
         flat_list = {}
         for index, item in enumerate(l):
-            index = text_type(index)
+            index = str(index)
             flat_item = self.flatten_item(item)
             nested_item = self.nest_flat_item(flat_item, index)
             flat_list.update(nested_item)
@@ -165,7 +159,7 @@ class CSVRenderer(BaseRenderer):
     def flatten_dict(self, d):
         flat_dict = {}
         for key, item in d.items():
-            key = text_type(key)
+            key = str(key)
             flat_item = self.flatten_item(item)
             nested_item = self.nest_flat_item(flat_item, key)
             flat_dict.update(nested_item)
@@ -235,7 +229,7 @@ class CSVStreamingRenderer(CSVRenderer):
             yield csv_writer.writerow(row)
 
 
-class PaginatedCSVRenderer (CSVRenderer):
+class PaginatedCSVRenderer(CSVRenderer):
     """
     Paginated renderer (when pagination is turned on for DRF)
     """

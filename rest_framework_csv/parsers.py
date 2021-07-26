@@ -1,13 +1,10 @@
-import unicodecsv as csv
-#import csv
-import codecs
-import io
-import six
+import csv
 
 from django.conf import settings
 from rest_framework.parsers import BaseParser
 from rest_framework.exceptions import ParseError
-from rest_framework_csv.orderedrows import OrderedRows
+
+from .orderedrows import OrderedRows
 
 
 def unicode_csv_reader(csv_data, dialect=csv.excel, charset='utf-8', **kwargs):
@@ -50,4 +47,3 @@ class CSVParser(BaseParser):
             return data
         except Exception as exc:
             raise ParseError('CSV parse error - %s' % str(exc))
-

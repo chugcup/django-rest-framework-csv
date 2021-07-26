@@ -1,8 +1,6 @@
 #-*- coding:utf-8 -*-
-from __future__ import unicode_literals
-
 import csv
-from six import BytesIO, PY3
+from io import BytesIO
 from types import GeneratorType
 
 from django.test import TestCase
@@ -134,8 +132,8 @@ class TestCSVRenderer (TestCase):
         data = [{'a': 'test', 'b': 'hello'}, {'a': 'foo', 'b': 'bar'}]
         writer_opts = {
             'quoting': csv.QUOTE_ALL,
-            'quotechar': '|' if PY3 else b'|',
-            'delimiter': ';' if PY3 else b';',
+            'quotechar': '|',
+            'delimiter': ';',
         }
         renderer.writer_opts = writer_opts
         dump = renderer.render(data)
@@ -149,8 +147,8 @@ class TestCSVRenderer (TestCase):
         data = [{'a': 'test', 'b': 'hello'}, {'a': 'foo', 'b': 'bar'}]
         writer_opts = {
             'quoting': csv.QUOTE_ALL,
-            'quotechar': '|' if PY3 else b'|',
-            'delimiter': ';' if PY3 else b';',
+            'quotechar': '|',
+            'delimiter': ';',
         }
         dump = renderer.render(data, renderer_context={'writer_opts': writer_opts})
         self.assertEquals(dump.count(b';'), 3)
